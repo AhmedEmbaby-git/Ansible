@@ -1,0 +1,21 @@
+
+- hosts: web
+  remote_user : ubuntu
+  become: yes
+  # gathering_facts: no 
+
+  tasks:
+   - name : update apt
+     apt:
+       update_cache: yes
+
+   - name: install apache2
+     apt:
+        name: apache2
+        update_cache: yes
+        state: latest
+
+ #  - name : install appache 
+  #    apt:
+  #      name: nginx
+  #      state: present        

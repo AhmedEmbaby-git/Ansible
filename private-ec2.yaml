@@ -1,0 +1,48 @@
+---
+- name: Install Docker and run Nginx container on private EC2
+  hosts: private
+  become: yes
+
+  tasks:
+    - name: Install Docker dependencies
+      apt: 
+        name: 
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+      when: ansible_os_family == "Debian"
+
+    - name: Install Docker
+      apt: 
+        name: docker-ce
+        state: present
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Start and enable Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    # - name: Run Nginx container
+    #   community.docker.docker_container: 
+    #   docker_container:
+    #     name: nginx
+    #     image: nginx
+    #     state: started
+    #     ports:
+    #       - "80:80"
