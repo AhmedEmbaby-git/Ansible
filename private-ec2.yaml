@@ -38,11 +38,11 @@
         state: started
         enabled: yes
 
-    # - name: Run Nginx container
-    #   community.docker.docker_container: 
-    #   docker_container:
-    #     name: nginx
-    #     image: nginx
-    #     state: started
-    #     ports:
-    #       - "80:80"
+    - name: Run Nginx container
+      community.docker.docker_container: 
+      docker_container:
+        name: nginx
+        image: nginx
+        state: started
+        ports:
+          - "80:80"
