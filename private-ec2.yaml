@@ -1,7 +1,7 @@
 - hosts: private
   remote_user: ubuntu
   become: yes
-  gathering_facts: yes
+  # gathering_facts: yes
 
   tasks:
     - name: Install Docker dependencies
@@ -38,11 +38,11 @@
         state: started
         enabled: yes
 
-    # - name: Run Nginx container
-    #   community.docker.docker_container: 
-    #   docker_container:
-    #     name: nginx
-    #     image: nginx
-    #     state: started
-    #     ports:
-    #       - "80:80"
+    - name: Run Nginx container
+      community.docker.docker_container: 
+      docker_container:
+        name: nginx
+        image: nginx
+        state: started
+        ports:
+          - "80:80"
