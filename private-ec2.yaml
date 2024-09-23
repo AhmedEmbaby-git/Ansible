@@ -1,9 +1,7 @@
----
-- name: Install Docker and run Nginx container on private EC2
- hosts: private
-  remote_user : ubuntu
+- hosts: private
+  remote_user: ubuntu
   become: yes
-  # gathering_facts: no
+  gathering_facts: yes
 
   tasks:
     - name: Install Docker dependencies
