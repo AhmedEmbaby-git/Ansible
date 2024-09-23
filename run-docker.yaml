@@ -1,0 +1,51 @@
+---
+- name: Deploy Nginx in Docker
+  hosts: all
+  become: true  # Ensures that commands are run with sudo
+  tasks:
+    - name: Install Docker dependencies (if Docker isn't installed)
+      apt:
+        name: 
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Add Docker’s official GPG key (if Docker isn't installed)
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Add Docker repository (if Docker isn't installed)
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install Docker (if Docker isn't installed)
+      apt:
+        name: docker-ce
+        state: present
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install Python Docker module (required for Ansible Docker modules)
+      pip:
+        name: docker
+        state: present
+
+    - name: Pull Nginx image from Docker Hub
+      community.docker.docker_image:
+        name: nginx
+        source: pull
+
+    - name: Run Nginx container
+      community.docker.docker_container:
+        name: nginx
+        image: nginx:latest
+        state: started
+        ports:
+          - "80:80"
